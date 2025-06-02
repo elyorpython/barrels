@@ -30,16 +30,37 @@ html {
     padding: 5px 1em;
     background-color: var(--base-color);
     border-right: 1px solid var(--line-color);
+    position: sticky;
+    top: 0;
+    align-self: start;
+    transition: 300ms ease-in-out;
+
+    position: sticky;
+    top: 0;
+    align-self: start;
+    transition: 300ms ease-in-out;
+    overflow: hidden;
+}
+
+#sidebar.close {
+    padding: 5px;
+    width: 60px;
 }
 
 #sidebar ul {
     list-style: none;
+    padding: 0;
 }
 
 #sidebar > ul > li:first-child {
     display: flex;
     justify-content: flex-end;
     margin-bottom: 16px;
+    line-height: 55px;
+
+    .logo {
+        font-weight: 600;
+    }
 }
 
 #sidebar ul li.active a {
@@ -87,4 +108,59 @@ html {
     h2, p {
         margin-top: 1em;
     }
+}
+
+#sidebar svg {
+    flex-shrink: 0;
+    fill: var(--text-color);
+}
+
+#sidebar a span, #sidebar .dropdown-btn span{
+    flex-grow: 1;
+}
+
+#sidebar a:hover, #sidebar .dropdown-btn:hover {
+    background-color: var(--hover-color);
+}
+
+#sidebar .sub-menu {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: 300ms ease-in-out;
+    > div {
+        overflow: hidden;
+    }
+}
+
+#sidebar .sub-menu.show {
+    grid-template-rows: 1fr;
+}
+
+.dropdown-btn svg {
+    transition: 200ms ease;
+}
+
+.rotate svg:last-child {
+    rotate: 180deg;
+}
+
+#sidebar .sub-menu a {
+    padding-left: 2em;
+}
+
+#toggle-btn {
+    margin-left: auto;
+    padding: 1em;
+    border: none;
+    border-radius: .5em;
+    background: none;
+    cursor: pointer;
+
+    svg {
+        transition: rotate 150ms ease;
+    }
+}
+
+#toggle-btn:hover {
+    background-color: var(--hover-color);
 }
