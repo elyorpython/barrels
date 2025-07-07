@@ -84,9 +84,15 @@ function Sidebar({ setPage }) {
                             </button>
                         </li>
                         <li>
-                            <button onClick={(e) => toggleSubMenu(e.currentTarget)} className="dropdown-btn">
+                            <button onClick={() => setPage('warehouse')} className='dropdown-btn'>
                                 <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M440-800v487L216-537l-56 57 320 320 320-320-56-57-224 224v-487h-80Z"/></svg>
                                 <span>Остаток</span>
+                            </button>
+                        </li>
+                        <li>
+                            <button onClick={() => setPage('products')} className='dropdown-btn'>
+                                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M440-800v487L216-537l-56 57 320 320 320-320-56-57-224 224v-487h-80Z"/></svg>
+                                <span>Номенклатура</span>
                             </button>
                         </li>
                     </div>

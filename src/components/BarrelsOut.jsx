@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import BarrelOutModalUpload from "./BarrelOutModalUpload"
+import BarrelOutAdd from "../window/AddBarrelWindow"
 
 function BarrelsOut({setPage}){
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -9,7 +9,7 @@ function BarrelsOut({setPage}){
         <section className="main-table_header">
           <h2>Реализация</h2>
           <p>
-            <button className="add-realization" onClick={() => setIsModalOpen(true)}>
+            <button className="add-realization" onClick={() => window.electronAPI.openAddBarrelWindow()}>
               <span>Добавить</span>
             </button>
           </p>
@@ -30,7 +30,7 @@ function BarrelsOut({setPage}){
         </table>
         </section>
         {isModalOpen && (
-          <BarrelOutModalUpload onClose={() => setIsModalOpen(false)} />
+          <BarrelOutAdd onClose={() => setIsModalOpen(false)} />
         )}
     </div>
   );

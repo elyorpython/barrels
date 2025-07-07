@@ -1,6 +1,6 @@
-const {app, BrowserWindow} = require('electron');
+const {app, BrowserWindow, ipcMain} = require('electron');
 const path = require('path');
-const dbase = require('./database');
+const db = require('./backend/database');
 const { error } = require('console');
 
 
@@ -10,6 +10,8 @@ function createWindow() {
         height: 600,
         webPreferences: {
             preload: path.join(__dirname, 'preload.js'),
+            contextIsolation: true,
+            nodeIntegration: false,
         },
     });
 
@@ -34,4 +36,52 @@ app.whenReady().then(() => {
 
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') app.quit();
+});
+
+function createAddBarrelWindow() {
+    const win = new BrowserWindow({
+        width: 800,
+        height: 600,
+        title: "Добавить отгрузку",
+        webPreferences: {
+            preload: path.join(__dirname, 'preload.js'),
+            nodeIntegration: false,
+            contextIsolation: true,
+        }
+    });
+
+    win.loadFile('public/add-barrel-window.html');
+}
+
+ipcMain.on('open-add-barrel-window', () => {
+    createAddBarrelWindow();
+});
+
+function ProductsWindow() {
+    const win = new BrowserWindow({
+        width: 800,
+        height: 600,
+        title: "Добавить отгрузку",
+        webPreferences: {
+            preload: path.join(__dirname, 'preload.js'),
+            nodeIntegration: false,
+            contextIsolation: true,
+        }
+    });
+
+    win.loadFile('public/products-window.html');
+}
+
+ipcMain.on('open-add-barrel-window', () => {
+    ProductsWindow();
+});
+
+ipcMain.handle('add-barrel-type', async (event, name, capacity) => {
+    try {
+        await db.query('INSERT INTO barrel_type (name, capacity) VALUE ($1, $2)', [name, capacity]);
+        return true;
+    } catch (error) {
+        console.error('Ошибка добавления товара:', error);
+        return false;
+    }
 });
