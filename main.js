@@ -51,11 +51,7 @@ function createAddBarrelWindow() {
     });
 
     win.loadFile('public/add-barrel-window.html');
-}
-
-ipcMain.on('open-add-barrel-window', () => {
-    createAddBarrelWindow();
-});
+};
 
 function ProductsWindow() {
     const win = new BrowserWindow({
@@ -76,12 +72,22 @@ ipcMain.on('open-add-barrel-window', () => {
     ProductsWindow();
 });
 
-ipcMain.handle('add-barrel-type', async (event, name, capacity) => {
+ipcMain.handle('add-barrel-type', async (event, name, product_id_su, liters) => {
+  try {
+    await db.addBarrelType(name, product_id_su, liters);
+    return true;
+  } catch (err) {
+    console.error('Error Add Product:', err);
+    return false;
+  }
+});
+
+ipcMain.handle("get-product-table", async () => {
     try {
-        await db.query('INSERT INTO barrel_type (name, capacity) VALUE ($1, $2)', [name, capacity]);
-        return true;
+        const result = await db.client.query("SELECT id, name, product_id_su, liters FROM products ORDER BY id DESC");
+        return result.rows;
     } catch (error) {
-        console.error('Ошибка добавления товара:', error);
-        return false;
+        console.error("Error fetching products", error);
+        return [];
     }
 });

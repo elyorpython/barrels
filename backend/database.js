@@ -18,26 +18,27 @@ async function initializeDatabase() {
             SELECT EXISTS (
                 SELECT FROM information_schema.tables
                 WHERE table_schema = 'public'
-                AND table_name = 'barrel_types'
+                AND table_name = 'products'
             );
         `);
 
         const exists = result.rows[0].exists;
 
         if (!exists) {
-            console.log("The 'barrel_types' table will not find it! For the convenience work, it will be created automatically.");
+            console.log("The 'products' table will not find it! For the convenience work, it will be created automatically.");
             
             await client.query(`
-            CREATE TABLE IF NOT EXISTS barrel_type (
+            CREATE TABLE IF NOT EXISTS products (
                 id SERIAL PRIMARY KEY,
                 name TEXT NOT NULL,
-                capacity INTEGER NOT NULL
+                product_id_su INTEGER NOT NULL,
+                liters INTEGER
                 );
             `);
 
-            console.log("The 'barrel_types' table has been created successfully");
+            console.log("The 'products' table has been created successfully");
         } else {
-            console.log("The 'barrel_types' table has been found ans is ready to work!");
+            console.log("The 'products' table has been found ans is ready to work!");
         }
 
     } catch(err) {
@@ -48,4 +49,23 @@ async function initializeDatabase() {
 
 initializeDatabase();
 
-module.exports = client;
+async function addBarrelType(name, product_id_su, liters) {
+  try {
+    const query = `
+      INSERT INTO products (name, product_id_su, liters)
+      VALUES ($1, $2, $3)
+      RETURNING *;
+    `;
+    const values = [name, product_id_su, liters];
+    const result = await client.query(query, values);
+    return result.rows[0];
+  } catch (err) {
+    console.error("🔴 Error in addBarrelType:", err);
+    throw err;
+  }
+}
+
+module.exports = {
+    client,
+    addBarrelType,
+};
